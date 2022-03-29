@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import useSupabase from "src/boot/supabase";
+import { SupabaseRealtimeClient } from "@supabase/supabase-js/dist/main/lib/SupabaseRealtimeClient";
 
 const user = ref(null);
 
@@ -46,7 +47,7 @@ export default function useAuthUser() {
     return user;
   };
 
-  const sendPasswordRestEmail = async (email) => {
+  const sendPasswordResetEmail = async (email) => {
     const { user, error } = await supabase.auth.api.resetPasswordForEmail(
       email
     );
@@ -54,14 +55,24 @@ export default function useAuthUser() {
     return user;
   };
 
+  const resetPassword = async (accessToken, newPassword) => {
+    const { user, error } = await supabase.auth.api.updateUser(
+      accessToken,
+      { password: newPassword }
+    )
+    if (error) throw error
+      return user;
+  }
+
   return {
+    user,
     login,
     loginWithSocialProvider,
     logout,
     isLoggedIn,
     register,
     update,
-    sendPasswordRestEmail,
-    user,
+    sendPasswordResetEmail,
+    resetPassword
   };
 }

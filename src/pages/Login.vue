@@ -16,11 +16,17 @@
         <q-btn label="Login" color="primary" class="full-width" type="submit" />
         <q-btn
           label="Register"
-          color="black"
+          color="grey"
           class="full-width"
-          flat
           type="submit"
           to="/register"
+        />
+        <q-btn
+          label="Forgot Password?"
+          color="grey"
+          class="full-width"
+          type="submit"
+          to="/forgot-password"
         />
       </div>
     </q-form>

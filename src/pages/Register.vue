@@ -24,6 +24,12 @@
           class="full-width"
           type="submit"
         />
+        <q-btn
+          label="Back"
+          color="grey"
+          class="full-width"
+          :to="{ name: 'login' }"
+        />
       </div>
     </q-form>
   </q-page>
@@ -41,7 +47,7 @@ export default defineComponent({
     const router = useRouter();
     const { register } = useAuthUser();
 
-    const form = ref ( {
+    const form = ref({
       name: "",
       email: "",
       password: "",
