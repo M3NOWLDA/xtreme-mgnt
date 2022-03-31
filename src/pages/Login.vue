@@ -7,11 +7,17 @@
           label="Email"
           v-model="form.email"
           standout="bg-teal text-white"
+          lazy-rules
+          :rules="(val) => (val && val.length > 0) || 'Email is required!'"
+          type="email"
         />
         <q-input
           label="Password"
           v-model="form.password"
           standout="bg-teal text-white"
+          lazy-rules
+          :rules="(val) => (val && val.length > 0) || 'Password is required!'"
+          type="password"
         />
         <q-btn label="Login" color="primary" class="full-width" type="submit" />
         <q-btn
@@ -34,9 +40,10 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import useAuthUser from "src/composables/UseAuthUser";
 import { useRouter } from "vue-router";
+import useNotify from "src/composables/UseNotify";
 
 export default defineComponent({
   name: "PageLogin",
@@ -44,19 +51,29 @@ export default defineComponent({
   setup() {
     const router = useRouter();
 
-    const { login } = useAuthUser();
+    const { login, isLoggedIn } = useAuthUser();
+
+    const { notifyError, notifySuccess } = useNotify();
 
     const form = ref({
       email: "",
       password: "",
     });
 
+    onMounted(() => {
+      if (isLoggedIn) {
+        router.push({ name: 'me' })
+      }
+    })
+
     const handleLogin = async () => {
       try {
         await login(form.value);
+        notifySuccess("Welcome!");
         router.push({ name: "me" });
       } catch (error) {
-        console.log(error.message);
+        //console.log(error.message);
+        notifyError(error.message);
       }
     };
 

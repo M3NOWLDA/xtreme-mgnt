@@ -7,12 +7,25 @@
           label="New Password"
           v-model="password"
           standout="bg-teal text-white"
+          lazy-rules
+          :rules="
+            (val) =>
+              (val && val.length >= 6) ||
+              'Password is required and more than 6 characters!'
+          "
+          type="password"
         />
         <q-btn
           label="Reset Password"
           color="black"
           class="full-width"
           type="submit"
+        />
+        <q-btn
+          label="Back"
+          color="grey"
+          class="full-width"
+          :to="{ name: 'login' }"
         />
       </div>
     </q-form>
@@ -23,30 +36,36 @@
 import { defineComponent, ref } from "vue";
 import useAuthUser from "src/composables/UseAuthUser";
 import { useRouter, useRoute } from "vue-router";
+import useNotify from "src/composables/UseNotify";
 
 export default defineComponent({
-  name: 'PageResetPassword',
-  setup () {
+  name: "PageResetPassword",
+  setup() {
+    const { resetPassword } = useAuthUser();
 
-    const { resetPassword } = useAuthUser()
+    const { notifyError, notifySuccess } = useNotify();
 
-    const router = useRouter()
+    const router = useRouter();
 
-    const route = useRoute()
-    const token = route.query.token
+    const route = useRoute();
+    const token = route.query.token;
 
-    const password = ref('')
+    const password = ref("");
 
     const handlePasswordReset = async () => {
-      await resetPassword(token, password.value)
-      router.push({ name: 'login' })
-    }
+      try {
+        await resetPassword(token, password.value);
+        notifySuccess('Password changed!');
+        router.push({ name: "login" });
+      } catch (error) {
+        notifyError(error.message);
+      }
+    };
 
     return {
       password,
-      handlePasswordReset
-    }
-
-  }
-})
+      handlePasswordReset,
+    };
+  },
+});
 </script>
