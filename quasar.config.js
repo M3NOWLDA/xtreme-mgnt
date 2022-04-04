@@ -47,7 +47,8 @@ module.exports = configure(function (ctx) {
       vueRouterMode: "history", // available values: 'hash', 'history'
       env: {
         SUPABASE_URL: 'https://rpocordzymjufwrkitzl.supabase.co',
-        SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwb2NvcmR6eW1qdWZ3cmtpdHpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDg0OTE2MTIsImV4cCI6MTk2NDA2NzYxMn0.rP10tij5cLilOyQ7GVAnLCu-x5qq5x2d4nqIpdDtg6c'
+        SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwb2NvcmR6eW1qdWZ3cmtpdHpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDg0OTE2MTIsImV4cCI6MTk2NDA2NzYxMn0.rP10tij5cLilOyQ7GVAnLCu-x5qq5x2d4nqIpdDtg6c',
+        API_VNA_GCLI:'https://apivna20.azurewebsites.net/Client/ClientList',
       },
 
       // transpile: false,

@@ -52,47 +52,34 @@ import { useQuasar } from "quasar";
 
 const linksList = [
   {
-    title: "Docs",
-    caption: "quasar.dev",
-    icon: "school",
-    link: "https://quasar.dev",
+    title: "Home Page",
+    icon: "house",
+    link: "HomePg",
   },
   {
-    title: "Github",
-    caption: "github.com/quasarframework",
-    icon: "code",
-    link: "https://github.com/quasarframework",
+    title: "Clients",
+    caption: "Client Management",
+    icon: "person",
+    link: "ClientPage",
   },
   {
-    title: "Discord Chat Channel",
-    caption: "chat.quasar.dev",
-    icon: "chat",
-    link: "https://chat.quasar.dev",
+    title: "Services",
+    caption: "Services Management",
+    icon: "star",
+    link: "ServicesPage",
   },
   {
-    title: "Forum",
-    caption: "forum.quasar.dev",
-    icon: "record_voice_over",
-    link: "https://forum.quasar.dev",
+    title: "Sales",
+    caption: "Sales Management",
+    icon: "money",
+    link: "SalesPg",
   },
   {
-    title: "Twitter",
+    title: "Admin",
     caption: "@quasarframework",
-    icon: "rss_feed",
+    icon: "key",
     link: "https://twitter.quasar.dev",
-  },
-  {
-    title: "Facebook",
-    caption: "@QuasarFramework",
-    icon: "public",
-    link: "https://facebook.quasar.dev",
-  },
-  {
-    title: "Quasar Awesome",
-    caption: "Community Quasar projects",
-    icon: "favorite",
-    link: "https://awesome.quasar.dev",
-  },
+  }
 ];
 
 export default defineComponent({
