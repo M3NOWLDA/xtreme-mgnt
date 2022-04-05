@@ -6,11 +6,6 @@
         label="Add New Client"
         @click="prompt = true"
       ></q-btn>
-      <q-btn
-        class="q-ml-sm"
-        style="background: #09b85d; color: white"
-        label="UPDATE CLIENT"
-      />
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -19,7 +14,6 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none">
-          <q-icon class="q-mr-sm q-mt-lg" name="person"></q-icon>
           <q-input
             autofocus
             dense
@@ -123,7 +117,22 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add address" v-close-popup />
+          <q-btn flat label="Add address" @click="secondDialog = true" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="secondDialog" persistent transition-show="scale" transition-hide="scale">
+      <q-card class="bg-teal text-white" style="width: 300px">
+        <q-card-section>
+          <div class="text-h6">Persistent</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Click/Tap on the backdrop.
+        </q-card-section>
+
+        <q-card-actions align="right" class="bg-white text-teal">
+          <q-btn flat label="OK" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -200,9 +209,9 @@ export default defineComponent({
     const mapClients = async () => {
       try {
         clientList.value = await getClientList();
-        if(clientList.value != null) notifySuccess('Clients Loaded')
+        if (clientList.value != null) notifySuccess("Clients Loaded");
       } catch (error) {
-        notifyError(error)
+        notifyError(error);
       }
     };
     const addClient = async () => {};
@@ -225,6 +234,7 @@ export default defineComponent({
       addClient,
       updateClient,
       prompt: ref(false),
+      secondDialog: ref(false)
     };
   },
 });

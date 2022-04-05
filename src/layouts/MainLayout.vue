@@ -60,13 +60,13 @@ const linksList = [
     title: "Clients",
     caption: "Client Management",
     icon: "person",
-    link: "ClientPage",
+    link: "clients",
   },
   {
     title: "Services",
     caption: "Services Management",
     icon: "star",
-    link: "ServicesPage",
+    link: "services",
   },
   {
     title: "Sales",
@@ -79,7 +79,7 @@ const linksList = [
     caption: "@quasarframework",
     icon: "key",
     link: "https://twitter.quasar.dev",
-  }
+  },
 ];
 
 export default defineComponent({
