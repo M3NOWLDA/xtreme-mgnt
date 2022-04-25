@@ -6,6 +6,20 @@
         label="Add New Client"
         @click="prompt = true"
       ></q-btn>
+
+      <q-space />
+      <q-input
+        outlined
+        dense
+        debounce="300"
+        v-model="filter"
+        placeholder="Search"
+        class="q-mr-sm"
+      >
+        <template v-slot:append>
+          <q-icon name="mdi-magnify" />
+        </template>
+      </q-input>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -121,7 +135,12 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-dialog v-model="secondDialog" persistent transition-show="scale" transition-hide="scale">
+    <q-dialog
+      v-model="secondDialog"
+      persistent
+      transition-show="scale"
+      transition-hide="scale"
+    >
       <q-card class="bg-teal text-white" style="width: 300px">
         <q-card-section>
           <div class="text-h6">Persistent</div>
@@ -234,7 +253,7 @@ export default defineComponent({
       addClient,
       updateClient,
       prompt: ref(false),
-      secondDialog: ref(false)
+      secondDialog: ref(false),
     };
   },
 });

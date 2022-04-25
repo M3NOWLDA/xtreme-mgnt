@@ -42,7 +42,7 @@ const routes = [
       {
         path: "me",
         name: "me",
-        component: () => import("pages/IndexPage.vue"),
+        component: () => import("pages/Me.vue"),
       },
       {
         path: "clients",
