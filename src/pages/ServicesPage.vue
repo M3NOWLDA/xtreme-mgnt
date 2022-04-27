@@ -3,14 +3,22 @@
     <div class="row">
       <q-btn
         color="primary"
-        label="Register Service"
+        label="Register New Service"
         @click="prompt = true"
       ></q-btn>
-      <q-btn
-        class="q-ml-sm"
-        style="background: #09b85d; color: white"
-        label="UPDATE CLIENT"
-      />
+      <q-space />
+      <q-input
+        outlined
+        dense
+        debounce="300"
+        v-model="filter"
+        placeholder="Search"
+        class="q-mr-sm"
+      >
+        <template v-slot:append>
+          <q-icon name="mdi-magnify" />
+        </template>
+      </q-input>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -131,7 +139,7 @@
     <div id="divTable" class="row q-mt-md">
       <q-table
         class="col fixed-header"
-        title="Clients"
+        title="Services"
         :rows="clientList"
         :columns="columns"
         dense
@@ -149,7 +157,7 @@ import useNotify from "src/composables/UseNotify";
 const columns = [
   {
     name: "id",
-    label: "Client ID",
+    label: "ID",
     align: "left",
     field: "id",
     sortable: true,
@@ -157,14 +165,14 @@ const columns = [
   {
     name: "cli_name",
     align: "center",
-    label: "Client Name",
+    label: "Client ID",
     field: "name",
     sortable: true,
   },
   {
     name: "location",
     align: "center",
-    label: "Location",
+    label: "Status",
     field: "location",
     sortable: true,
   },
@@ -217,8 +225,8 @@ export default defineComponent({
       addClient,
       updateClient,
       prompt: ref(false),
-      MyPagination:{
-        rowsPerPage: 50
+      MyPagination: {
+        rowsPerPage: 50,
       },
     };
   },

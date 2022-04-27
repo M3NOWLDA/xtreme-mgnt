@@ -3,7 +3,7 @@
     <div class="row">
       <q-btn
         color="primary"
-        label="Add New Client"
+        label="Add New User"
         @click="prompt = true"
       ></q-btn>
 
@@ -24,7 +24,7 @@
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Add Client</div>
+          <div class="text-h6">Add User</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -127,6 +127,15 @@
             label="Country"
             :rules="nameRules"
           ></q-input>
+          <q-input
+            autofocus
+            dense
+            clearable
+            v-model="cliForm.job"
+            type="text"
+            label="Job Title"
+            :rules="nameRules"
+          ></q-input>
         </q-card-section>
 
         <q-card-actions align="right" class="text-primary">
@@ -159,7 +168,7 @@
     <div id="divTable" class="row q-mt-md">
       <q-table
         class="col fixed-header"
-        title="Clients"
+        title="Users"
         :rows="clientList"
         :columns="columns"
         dense
@@ -177,7 +186,7 @@ import useApi from "src/composables/UseApi";
 const columns = [
   {
     name: "id",
-    label: "ID",
+    label: "User ID",
     align: "left",
     field: "id",
     sortable: true,
@@ -185,14 +194,14 @@ const columns = [
   {
     name: "cli_name",
     align: "center",
-    label: "Name",
+    label: "User Name",
     field: "name",
     sortable: true,
   },
   {
-    name: "location",
+    name: "job",
     align: "center",
-    label: "Location",
+    label: "Job Title",
     field: "location",
     sortable: true,
   },
@@ -205,7 +214,7 @@ const columns = [
   },
 ];
 export default defineComponent({
-  name: "ClientPage",
+  name: "UsersPage",
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const clientList = ref([]);
@@ -224,6 +233,7 @@ export default defineComponent({
       city: "",
       district: "",
       country: "",
+      job: "",
     });
     const mapClients = async () => {
       try {

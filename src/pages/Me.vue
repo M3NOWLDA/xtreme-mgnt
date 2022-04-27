@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex flex-center">
     <div v-if="user">
-      <h3>Bem-vindo, {{ user.user_metadata.name }}.</h3>
+      <h3>Welcome, {{ user.user_metadata.name }}.</h3>
       <div class="q-pa-md">
         <div class="q-gutter-y-md" style="max-width: 600px">
           <q-tabs
@@ -45,10 +45,10 @@
           >
             <q-route-tab
               :ripple="false"
-              name="orders"
+              name="suppliers"
               icon="archive"
-              label="Orders"
-              to="/orders"
+              label="Suppliers"
+              to="/suppliers"
               exact
             />
           </q-tabs>

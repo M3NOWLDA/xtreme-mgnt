@@ -3,7 +3,7 @@
     <div class="row">
       <q-btn
         color="primary"
-        label="Add New Client"
+        label="Add New Supplier"
         @click="prompt = true"
       ></q-btn>
 
@@ -24,7 +24,7 @@
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Add Client</div>
+          <div class="text-h6">Add Supplier</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -34,25 +34,25 @@
             clearable
             v-model="cliForm.username"
             type="text"
-            label="User Name"
+            label="Business Name"
             :rules="nameRules"
           ></q-input>
           <q-input
             autofocus
             dense
             clearable
-            v-model="cliForm.firstname"
-            type="text"
-            label="First Name"
+            v-model="cliForm.average"
+            type="number"
+            label="Average Delivery (Days)"
             :rules="nameRules"
           ></q-input>
           <q-input
             autofocus
             dense
             clearable
-            v-model="cliForm.surname"
+            v-model="cliForm.business"
             type="text"
-            label="Surname"
+            label="Business Type"
             :rules="nameRules"
           ></q-input>
           <q-input
@@ -131,7 +131,7 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add Client" @click="secondDialog = true" />
+          <q-btn flat label="Add Supplier" @click="secondDialog = true" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -159,7 +159,7 @@
     <div id="divTable" class="row q-mt-md">
       <q-table
         class="col fixed-header"
-        title="Clients"
+        title="Suppliers"
         :rows="clientList"
         :columns="columns"
         dense
@@ -185,14 +185,14 @@ const columns = [
   {
     name: "cli_name",
     align: "center",
-    label: "Name",
+    label: "Business Name",
     field: "name",
     sortable: true,
   },
   {
     name: "location",
     align: "center",
-    label: "Location",
+    label: "NIF",
     field: "location",
     sortable: true,
   },
@@ -205,7 +205,7 @@ const columns = [
   },
 ];
 export default defineComponent({
-  name: "ClientPage",
+  name: "OrdersPage",
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const clientList = ref([]);
