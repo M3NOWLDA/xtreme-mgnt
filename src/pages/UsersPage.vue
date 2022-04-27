@@ -140,7 +140,7 @@
 
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add Client" @click="secondDialog = true" />
+          <q-btn flat label="Add User" @click="secondDialog = true" />
         </q-card-actions>
       </q-card>
     </q-dialog>
