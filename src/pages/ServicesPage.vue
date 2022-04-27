@@ -23,7 +23,7 @@
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
         <q-card-section>
-          <div class="text-h6">Add Client</div>
+          <div class="text-h6">Add Services</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none">
@@ -140,7 +140,7 @@
       <q-table
         class="col fixed-header"
         title="Services"
-        :rows="clientList"
+        :rows="serviceList"
         :columns="columns"
         dense
         :pagination="MyPagination"
@@ -154,33 +154,41 @@
 <script>
 import { defineComponent, ref, onMounted } from "vue";
 import useNotify from "src/composables/UseNotify";
+import useApi from "src/composables/UseApi";
 const columns = [
   {
     name: "id",
     label: "ID",
     align: "left",
-    field: "id",
+    field: "ServiceId",
     sortable: true,
   },
   {
     name: "cli_name",
     align: "center",
     label: "Client ID",
-    field: "name",
+    field: "ClientId",
     sortable: true,
   },
   {
     name: "location",
     align: "center",
-    label: "Status",
-    field: "location",
+    label: "Type",
+    field: "Type",
     sortable: true,
   },
   {
     name: "date",
     align: "center",
-    label: "Register Date",
-    field: "date",
+    label: "Status",
+    field: "Status",
+    sortable: true,
+  },
+  {
+    name: "date",
+    align: "center",
+    label: "Start Date",
+    field: "StartDate",
     sortable: true,
   },
 ];
@@ -188,8 +196,9 @@ export default defineComponent({
   name: "ServicesPage",
   setup() {
     const { notifyError, notifySuccess } = useNotify();
-    const clientList = ref([]);
+    const serviceList = ref([]);
     const aux = ref(false);
+    const { getServiceList } = useApi();
     // Reactive form for client data inputs
     const cliForm = ref({
       username: "",
@@ -204,26 +213,29 @@ export default defineComponent({
       district: "",
       country: "",
     });
-    const mapClients = async () => {};
-    const addClient = async () => {};
-    const updateClient = () => {};
+    const mapServices = async () => {
+      try {
+        serviceList.value = await getServiceList();
+        if (serviceList.value != null) notifySuccess("Services Loaded");
+      } catch (error) {
+        notifyError(error);
+      }
+    };
     const changeAux = (validation) => {
       if (validation != 0) aux.value = true;
       else aux.value = false;
     };
     // When view is mounted, call methods below
     onMounted(() => {
-      mapClients();
+      mapServices();
     });
     return {
       aux,
       cliForm,
       columns,
-      clientList,
+      serviceList,
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
       changeAux,
-      addClient,
-      updateClient,
       prompt: ref(false),
       MyPagination: {
         rowsPerPage: 50,

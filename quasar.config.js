@@ -48,7 +48,10 @@ module.exports = configure(function (ctx) {
       env: {
         SUPABASE_URL: 'https://rpocordzymjufwrkitzl.supabase.co',
         SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwb2NvcmR6eW1qdWZ3cmtpdHpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDg0OTE2MTIsImV4cCI6MTk2NDA2NzYxMn0.rP10tij5cLilOyQ7GVAnLCu-x5qq5x2d4nqIpdDtg6c',
-        API_VNA_GCLI:'https://apivna20.azurewebsites.net/Client/ClientList',
+        API_M3_GCLI:'https://apim3.azurewebsites.net/Client/ClientList',
+        API_M3_GSER:'https://apim3.azurewebsites.net/Service/ServiceList',
+        API_M3_GSTF:'https://apim3.azurewebsites.net/Staff/StaffList',
+        API_M3_GSUP:'https://apim3.azurewebsites.net/Supplier/SupplierList'
       },
 
       // transpile: false,
