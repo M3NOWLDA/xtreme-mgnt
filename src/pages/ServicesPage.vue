@@ -18,121 +18,76 @@
         <template v-slot:append>
           <q-icon name="mdi-magnify" />
         </template>
-      </q-input>
+    </q-input>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
+      <q-form @submit.prevent="addService(s_form)">
         <q-card-section>
           <div class="text-h6">Add Services</div>
         </q-card-section>
-
         <q-card-section class="q-pt-none">
-          <q-icon class="q-mr-sm q-mt-lg" name="person"></q-icon>
-          <q-input
-            autofocus
+          <q-select
+            filled
             dense
             clearable
-            v-model="cliForm.username"
-            type="text"
-            label="User Name"
+            v-model="s_form.type"
+            :options="items"
+            label="Service Type"
             :rules="nameRules"
-          ></q-input>
+          ></q-select>
           <q-input
             autofocus
             dense
             clearable
-            v-model="cliForm.firstname"
-            type="text"
-            label="First Name"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.surname"
-            type="text"
-            label="Surname"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.email"
-            type="email"
-            label="Email"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.phone"
+            v-model="s_form.clientId"
             type="number"
-            label="Phone"
+            label="Client ID"
+            :rules="nameRules"
+          ></q-input>
+          <q-select
+            filled
+            dense
+            clearable
+            v-model="s_form.status"
+            :options="items_2"
+            label="Status"
+            :rules="nameRules"
+          ></q-select>
+          <q-input
+            autofocus
+            dense
+            clearable
+            v-model="s_form.observations"
+            type="text"
+            label="Observations"
             :rules="nameRules"
           ></q-input>
           <q-input
             autofocus
             dense
             clearable
-            v-model="cliForm.nif"
-            type="number"
-            label="NIF"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            dense
-            clearable
-            v-model="cliForm.addressline"
-            type="text"
-            label="Address Line"
-            :rules="nameRules"
-          >
-          </q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.zipcode"
-            type="text"
-            label="ZIP Code"
+            v-model="s_form.startDate"
+            type="date"
+            hint="Start Date"
             :rules="nameRules"
           ></q-input>
           <q-input
             autofocus
             dense
             clearable
-            v-model="cliForm.city"
-            type="text"
-            label="City"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.district"
-            type="text"
-            label="State"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.country"
-            type="text"
-            label="Country"
+            v-model="s_form.endDate"
+            type="date"
+            hint="End Date"
             :rules="nameRules"
           ></q-input>
         </q-card-section>
-
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add address" v-close-popup />
+          <q-btn flat label="Add Service"  type="submit" v-close-popup />
         </q-card-actions>
+      </q-form>
+
       </q-card>
     </q-dialog>
 
@@ -164,21 +119,21 @@ const columns = [
     sortable: true,
   },
   {
-    name: "cli_name",
+    name: "cli_id",
     align: "center",
     label: "Client ID",
     field: "ClientId",
     sortable: true,
   },
   {
-    name: "location",
+    name: "type",
     align: "center",
     label: "Type",
     field: "Type",
     sortable: true,
   },
   {
-    name: "date",
+    name: "status",
     align: "center",
     label: "Status",
     field: "Status",
@@ -197,21 +152,17 @@ export default defineComponent({
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const serviceList = ref([]);
-    const aux = ref(false);
-    const { getServiceList } = useApi();
+    const { getServiceList, postService } = useApi();
+
     // Reactive form for client data inputs
-    const cliForm = ref({
-      username: "",
-      firstname: "",
-      surname: "",
-      email: "",
-      phone: "",
-      nif: "",
-      addressline: "",
-      zipcode: "",
-      city: "",
-      district: "",
-      country: "",
+    const s_form = ref({
+      typeId: "",
+      type: "",
+      clientId: "",
+      status: "",
+      observations: "",
+      startDate: "",
+      endDate: "",
     });
     const mapServices = async () => {
       try {
@@ -221,21 +172,44 @@ export default defineComponent({
         notifyError(error);
       }
     };
-    const changeAux = (validation) => {
-      if (validation != 0) aux.value = true;
-      else aux.value = false;
-    };
+
+    const addService = async (s_form) =>{
+      if     (s_form.type == 'Reparação Equip')      s_form.typeId = 1;
+      else if(s_form.type == 'Diagnóstico') s_form.typeId = 2;
+      else if(s_form.type == 'Manutenção Equip')  s_form.typeId = 3;
+      else if(s_form.type == 'Montagem Equip')    s_form.typeId = 4;
+
+      if(s_form.status == 'Active') s_form.status = 1
+      else if (s_form.status == 'Inactive') s_form.status = 0
+      try {
+        console.log(s_form)
+        const status = await postService(s_form)
+        if(status == 200){
+          serviceList.value = await getServiceList()
+          notifySuccess("New Service Registered!")
+        }
+        else notifyError("Error in Register New Service!")
+      } catch (error) {
+        notifyError("Internal Error Aplication")
+      }
+    }
+
     // When view is mounted, call methods below
     onMounted(() => {
       mapServices();
     });
     return {
-      aux,
-      cliForm,
+      s_form,
       columns,
       serviceList,
+      addService,
+      items:[
+        'Manutenção Equip', 'Reparação Equip', 'Diagonóstico', 'Montagem Equip'
+      ],
+      items_2:[
+        'Active', 'Inactive'
+      ],
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
-      changeAux,
       prompt: ref(false),
       MyPagination: {
         rowsPerPage: 50,

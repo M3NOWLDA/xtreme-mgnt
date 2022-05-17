@@ -41,10 +41,49 @@ export default function useApi() {
     }
   };
 
+  const postClient = async(cliform) => {
+
+    try {
+        const resp = await axios.post(process.env.API_M3_NCLI, cliform)
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+  const postService = async(s_form) => {
+    try {
+        const response = await axios.post(process.env.API_M3_NSER, s_form)
+        return response.status
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
+  const postSupplier = async(sup_form) => {
+    try {
+        const response = await axios.post(process.env.API_M3_NSUP, sup_form)
+        return response.status
+    } catch (error) {
+        console.log(error)
+    }
+  }
+  const postStaff = async(st_form) => {
+    try {
+        const response = await axios.post(process.env.API_M3_NSTF, st_form)
+        return response.status
+    } catch (error) {
+        console.log(error)
+    }
+  }
+
   return {
     getClientList,
     getServiceList,
     getStaffList,
-    getSupplierList
+    getSupplierList,
+    postClient,
+    postService,
+    postSupplier,
+    postStaff
   };
 }

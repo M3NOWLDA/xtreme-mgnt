@@ -64,6 +64,11 @@ const routes = [
         name: "suppliers",
         component: () => import("pages/SuppliersPage.vue"),
       },
+      {
+        path: "staff",
+        name: "staff",
+        component: () => import("pages/StaffPage.vue"),
+      },
     ],
     meta: {
       requiresAuth: true,

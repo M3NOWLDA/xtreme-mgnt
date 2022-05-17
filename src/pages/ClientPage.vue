@@ -23,116 +23,119 @@
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">Add Client</div>
-        </q-card-section>
+        <q-form @submit.prevent="addClient(cliForm)">
+          <q-card-section>
+            <div class="text-h6">Add Client</div>
+          </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.username"
-            type="text"
-            label="User Name"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.firstname"
-            type="text"
-            label="First Name"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.surname"
-            type="text"
-            label="Surname"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.email"
-            type="email"
-            label="Email"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.phone"
-            type="number"
-            label="Phone"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.nif"
-            type="number"
-            label="NIF"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            dense
-            clearable
-            v-model="cliForm.addressline"
-            type="text"
-            label="Address Line"
-            :rules="nameRules"
-          >
-          </q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.zipcode"
-            type="text"
-            label="ZIP Code"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.city"
-            type="text"
-            label="City"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.district"
-            type="text"
-            label="State"
-            :rules="nameRules"
-          ></q-input>
-          <q-input
-            autofocus
-            dense
-            clearable
-            v-model="cliForm.country"
-            type="text"
-            label="Country"
-            :rules="nameRules"
-          ></q-input>
-        </q-card-section>
+          <q-card-section class="q-pt-none">
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.username"
+              type="text"
+              label="User Name"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.firstname"
+              type="text"
+              label="First Name"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.surname"
+              type="text"
+              label="Surname"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.email"
+              type="email"
+              label="Email"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.phone"
+              type="number"
+              label="Phone"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.nif"
+              type="number"
+              label="NIF"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              dense
+              clearable
+              v-model="cliForm.addressline"
+              type="text"
+              label="Address Line"
+              :rules="nameRules"
+            >
+            </q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.zipcode"
+              type="text"
+              label="ZIP Code"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.city"
+              type="text"
+              label="City"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.district"
+              type="text"
+              label="State"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="cliForm.country"
+              type="text"
+              label="Country"
+              :rules="nameRules"
+            ></q-input>
+          </q-card-section>
 
-        <q-card-actions align="right" class="text-primary">
-          <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add Client" @click="secondDialog = true" />
-        </q-card-actions>
+          <q-card-actions align="right" class="text-primary">
+            <q-btn flat label="Cancel" v-close-popup />
+            <q-btn flat label="Add Client" type="submit"/>
+          </q-card-actions>
+        </q-form>
+
       </q-card>
     </q-dialog>
     <q-dialog
@@ -223,8 +226,7 @@ export default defineComponent({
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const clientList = ref([]);
-    const aux = ref(false);
-    const { getClientList } = useApi();
+    const { getClientList, postClient } = useApi();
     // Reactive form for client data inputs
     const cliForm = ref({
       username: "",
@@ -247,23 +249,25 @@ export default defineComponent({
         notifyError(error);
       }
     };
-    const addClient = async () => {};
-    const updateClient = () => {};
-    const changeAux = (validation) => {
-      if (validation != 0) aux.value = true;
-      else aux.value = false;
+    const addClient = async (cliForm) => {
+      try {
+        await postClient(cliForm)
+        clientList.value = await getClientList()
+        notifySuccess("Client Added!")
+      } catch (error) {
+        console.log(error)
+      }
     };
+    const updateClient = () => {};
     // When view is mounted, call methods below
     onMounted(() => {
       mapClients();
     });
     return {
-      aux,
       cliForm,
       columns,
       clientList,
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
-      changeAux,
       addClient,
       updateClient,
       prompt: ref(false),

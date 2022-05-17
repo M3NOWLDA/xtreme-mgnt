@@ -51,7 +51,16 @@
               to="/suppliers"
               exact
             />
+            <q-route-tab
+              :ripple="false"
+              name="staff"
+              icon="work"
+              label="Staff"
+              to="/staff"
+              exact
+            />
           </q-tabs>
+
         </div>
       </div>
     </div>

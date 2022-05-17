@@ -3,7 +3,7 @@
     <div class="row">
       <q-btn
         color="primary"
-        label="Add New Supplier"
+        label="Add New Staff"
         @click="prompt = true"
       ></q-btn>
 
@@ -23,9 +23,9 @@
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
-        <q-form @submit.prevent="addSupplier(sup_form)">
+        <q-form @submit.prevent="addStaff(staff_form)">
             <q-card-section>
-              <div class="text-h6">Add Supplier</div>
+              <div class="text-h6">Add Staff</div>
             </q-card-section>
 
             <q-card-section class="q-pt-none">
@@ -33,33 +33,69 @@
                 autofocus
                 dense
                 clearable
-                v-model="sup_form.businessName"
+                v-model="staff_form.username"
                 type="text"
-                label="Business Name"
+                label="Username"
                 :rules="nameRules"
               ></q-input>
               <q-input
                 autofocus
                 dense
                 clearable
-                v-model="sup_form.businessType"
+                v-model="staff_form.firstname"
                 type="text"
-                label="Business type"
+                label="First Name"
                 :rules="nameRules"
               ></q-input>
               <q-input
                 autofocus
                 dense
                 clearable
-                v-model="sup_form.nif"
+                v-model="staff_form.surname"
+                type="text"
+                label="Surname"
+                :rules="nameRules"
+              ></q-input>
+              <q-input
+                autofocus
+                dense
+                clearable
+                v-model="staff_form.email"
+                type="text"
+                label="Email"
+                :rules="nameRules"
+              ></q-input>
+              <q-input
+                autofocus
+                dense
+                clearable
+                v-model="staff_form.phone"
+                type="text"
+                label="Phone"
+                :rules="nameRules"
+              ></q-input>
+              <q-input
+                autofocus
+                dense
+                clearable
+                v-model="staff_form.nif"
                 type="number"
                 label="NIF"
                 :rules="nameRules"
               ></q-input>
               <q-input
+                autofocus
                 dense
                 clearable
-                v-model="sup_form.addressline"
+                v-model="staff_form.jobTitle"
+                type="text"
+                label="Job Title"
+                :rules="nameRules"
+              ></q-input>
+              <q-input
+                dense
+                clearable
+                v-model="staff_form.addressline"
                 type="text"
                 label="Address Line"
                 :rules="nameRules"
@@ -69,7 +105,7 @@
                 autofocus
                 dense
                 clearable
-                v-model="sup_form.zipcode"
+                v-model="staff_form.zipcode"
                 type="text"
                 label="ZIP Code"
                 :rules="nameRules"
@@ -78,7 +114,7 @@
                 autofocus
                 dense
                 clearable
-                v-model="sup_form.city"
+                v-model="staff_form.city"
                 type="text"
                 label="City"
                 :rules="nameRules"
@@ -87,7 +123,7 @@
                 autofocus
                 dense
                 clearable
-                v-model="sup_form.district"
+                v-model="staff_form.district"
                 type="text"
                 label="State"
                 :rules="nameRules"
@@ -96,20 +132,11 @@
               autofocus
               dense
               clearable
-              v-model="sup_form.country"
+              v-model="staff_form.country"
               type="text"
               label="Country"
               :rules="nameRules"
             ></q-input>
-            <q-input
-                autofocus
-                dense
-                clearable
-                v-model="sup_form.deliveryAverage"
-                type="number"
-                label="Deliverty Average"
-                :rules="nameRules"
-              ></q-input>
           </q-card-section>
 
           <q-card-actions align="right" class="text-primary">
@@ -145,7 +172,7 @@
       <q-table
         class="col fixed-header"
         title="Suppliers"
-        :rows="supplier_list"
+        :rows="staff_list"
         :columns="columns"
         dense
         :rows-per-page-options="[50, 75, 100, 150, 200]"
@@ -161,24 +188,38 @@ import useNotify from "src/composables/UseNotify";
 import useApi from "src/composables/UseApi";
 const columns = [
   {
-    name: "id",
+    name: "EmployeeId",
     label: "ID",
     align: "left",
-    field: "SupplierId",
+    field: "EmployeeId",
     sortable: true,
   },
   {
-    name: "business_name",
+    name: "Username",
     align: "center",
-    label: "Business Name",
-    field: "BusinessName",
+    label: "Username",
+    field: "Username",
     sortable: true,
   },
     {
-    name: "business_type",
+    name: "FirstName",
     align: "center",
-    label: "Business Type",
-    field: "BusinessType",
+    label: "First Name",
+    field: "FirstName",
+    sortable: true,
+  },
+      {
+    name: "Surname",
+    align: "center",
+    label: "Surname",
+    field: "Surname",
+    sortable: true,
+  },
+  {
+    name: "JobTitle",
+    align: "center",
+    label: "Job Title",
+    field: "JobTitle",
     sortable: true,
   },
   {
@@ -191,8 +232,15 @@ const columns = [
   {
     name: "address",
     align: "center",
-    label: "Register Date",
+    label: "Address",
     field: "Addressline",
+    sortable: true,
+  },
+    {
+    name: "email",
+    align: "center",
+    label: "Email",
+    field: "Email",
     sortable: true,
   },
   {
@@ -203,46 +251,55 @@ const columns = [
     sortable: true,
   },
     {
-    name: "DeliveryAverage",
+    name: "District",
     align: "center",
-    label: "Delivery Average",
-    field: "DeliveryAverage",
+    label: "State",
+    field: "District",
     sortable: true,
   },
-
+    {
+    name: "country",
+    align: "center",
+    label: "Country",
+    field: "Country",
+    sortable: true,
+  },
 ];
 export default defineComponent({
   name: "OrdersPage",
   setup() {
     const { notifyError, notifySuccess } = useNotify();
-    const supplier_list = ref([]);
-    const { getSupplierList, postSupplier } = useApi();
+    const staff_list = ref([]);
+    const { getStaffList, postStaff } = useApi();
 
-    const sup_form = ref({
-      businessName: "",
-      businessType: "",
+    const staff_form = ref({
+      username: "",
+      firstname: "",
+      surname: "",
+      email: "",
+      phone: "",
       nif: "",
       addressline: "",
       zipcode: "",
       city: "",
       district: "",
       country: "",
-      deliveryAverage: ""
+      jobTitle: ""
     });
-    const mapSupplier = async () => {
+    const mapStaff = async () => {
       try {
-        supplier_list.value = await getSupplierList();
-        if (supplier_list.value != null) notifySuccess("Clients Loaded");
+        staff_list.value = await getStaffList();
+        if (staff_list.value != null) notifySuccess("Clients Loaded");
       } catch (error) {
         notifyError(error);
       }
     };
 
-    const addSupplier = async (sup_form) =>{
+    const addStaff = async (staff_form) =>{
       try {
-        console.log(sup_form)
-        await postSupplier(sup_form)
-        supplier_list.value = await getSupplierList()
+        console.log(staff_form)
+        await postStaff(staff_form)
+        staff_list.value = await getStaffList()
         notifySuccess("Supplier Added!")
       } catch (error) {
         console.log(error)
@@ -250,13 +307,13 @@ export default defineComponent({
     }
     // When view is mounted, call methods below
     onMounted(() => {
-      mapSupplier();
+      mapStaff();
     });
     return {
-      sup_form,
+      staff_form,
       columns,
-      addSupplier,
-      supplier_list,
+      addStaff,
+      staff_list,
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
       prompt: ref(false),
       secondDialog: ref(false),
