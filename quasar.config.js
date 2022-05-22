@@ -46,16 +46,18 @@ module.exports = configure(function (ctx) {
     build: {
       vueRouterMode: "history", // available values: 'hash', 'history'
       env: {
-        SUPABASE_URL: 'https://rpocordzymjufwrkitzl.supabase.co',
-        SUPABASE_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwb2NvcmR6eW1qdWZ3cmtpdHpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDg0OTE2MTIsImV4cCI6MTk2NDA2NzYxMn0.rP10tij5cLilOyQ7GVAnLCu-x5qq5x2d4nqIpdDtg6c',
-        API_M3_GCLI:'https://apim3.azurewebsites.net/Client/ClientList',
-        API_M3_NCLI:'https://apim3.azurewebsites.net/Client/NewClient',
-        API_M3_GSER:'https://apim3.azurewebsites.net/Service/ServiceList',
-        API_M3_NSER:'https://apim3.azurewebsites.net/Service/NewService',
-        API_M3_GSTF:'https://apim3.azurewebsites.net/Staff/EmployeeList',
-        API_M3_NSTF:'https://apim3.azurewebsites.net/Staff/NewStaff',
-        API_M3_GSUP:'https://apim3.azurewebsites.net/Supplier/SupplierList',
-        API_M3_NSUP:'https://apim3.azurewebsites.net/Supplier/NewSupplier'
+        SUPABASE_URL: "https://rpocordzymjufwrkitzl.supabase.co",
+        SUPABASE_KEY:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJwb2NvcmR6eW1qdWZ3cmtpdHpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NDg0OTE2MTIsImV4cCI6MTk2NDA2NzYxMn0.rP10tij5cLilOyQ7GVAnLCu-x5qq5x2d4nqIpdDtg6c",
+        API_M3_GCLI: "https://apim3.azurewebsites.net/Client/ClientList",
+        API_M3_NCLI: "https://apim3.azurewebsites.net/Client/NewClient",
+        API_M3_GSER: "https://apim3.azurewebsites.net/Service/ServiceList",
+        API_M3_NSER: "https://apim3.azurewebsites.net/Service/NewService",
+        API_M3_GSTF: "https://apim3.azurewebsites.net/Staff/EmployeeList",
+        API_M3_NSTF: "https://apim3.azurewebsites.net/Staff/NewStaff",
+        API_M3_GSUP: "https://apim3.azurewebsites.net/Supplier/SupplierList",
+        API_M3_NSUP: "https://apim3.azurewebsites.net/Supplier/NewSupplier",
+        API_M3_SBF: "https://apim3.azurewebsites.net/Service/ServiceByFilter"
       },
 
       // transpile: false,
@@ -122,10 +124,7 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: [
-        'Dialog',
-        'Notify'
-      ],
+      plugins: ["Dialog", "Notify"],
     },
 
     // animations: 'all', // --- includes all animations

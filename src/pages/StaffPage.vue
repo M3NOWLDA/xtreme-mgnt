@@ -24,111 +24,111 @@
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
         <q-form @submit.prevent="addStaff(staff_form)">
-            <q-card-section>
-              <div class="text-h6">Add Staff</div>
-            </q-card-section>
+          <q-card-section>
+            <div class="text-h6">Add Staff</div>
+          </q-card-section>
 
-            <q-card-section class="q-pt-none">
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.username"
-                type="text"
-                label="Username"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.firstname"
-                type="text"
-                label="First Name"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.surname"
-                type="text"
-                label="Surname"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.email"
-                type="text"
-                label="Email"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.phone"
-                type="text"
-                label="Phone"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.nif"
-                type="number"
-                label="NIF"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.jobTitle"
-                type="text"
-                label="Job Title"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                dense
-                clearable
-                v-model="staff_form.addressline"
-                type="text"
-                label="Address Line"
-                :rules="nameRules"
-              >
-              </q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.zipcode"
-                type="text"
-                label="ZIP Code"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.city"
-                type="text"
-                label="City"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
-                autofocus
-                dense
-                clearable
-                v-model="staff_form.district"
-                type="text"
-                label="State"
-                :rules="nameRules"
-              ></q-input>
-              <q-input
+          <q-card-section class="q-pt-none">
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.username"
+              type="text"
+              label="Username"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.firstname"
+              type="text"
+              label="First Name"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.surname"
+              type="text"
+              label="Surname"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.email"
+              type="text"
+              label="Email"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.phone"
+              type="text"
+              label="Phone"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.nif"
+              type="number"
+              label="NIF"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.jobTitle"
+              type="text"
+              label="Job Title"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              dense
+              clearable
+              v-model="staff_form.addressline"
+              type="text"
+              label="Address Line"
+              :rules="nameRules"
+            >
+            </q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.zipcode"
+              type="text"
+              label="ZIP Code"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.city"
+              type="text"
+              label="City"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
+              v-model="staff_form.district"
+              type="text"
+              label="State"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
               autofocus
               dense
               clearable
@@ -141,10 +141,9 @@
 
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancel" v-close-popup />
-            <q-btn flat label="Add Supplier" type="submit" />
+            <q-btn flat label="Add Staff" type="submit" />
           </q-card-actions>
         </q-form>
-
       </q-card>
     </q-dialog>
     <q-dialog
@@ -201,14 +200,14 @@ const columns = [
     field: "Username",
     sortable: true,
   },
-    {
+  {
     name: "FirstName",
     align: "center",
     label: "First Name",
     field: "FirstName",
     sortable: true,
   },
-      {
+  {
     name: "Surname",
     align: "center",
     label: "Surname",
@@ -236,7 +235,7 @@ const columns = [
     field: "Addressline",
     sortable: true,
   },
-    {
+  {
     name: "email",
     align: "center",
     label: "Email",
@@ -250,14 +249,14 @@ const columns = [
     field: "City",
     sortable: true,
   },
-    {
+  {
     name: "District",
     align: "center",
     label: "State",
     field: "District",
     sortable: true,
   },
-    {
+  {
     name: "country",
     align: "center",
     label: "Country",
@@ -284,7 +283,7 @@ export default defineComponent({
       city: "",
       district: "",
       country: "",
-      jobTitle: ""
+      jobTitle: "",
     });
     const mapStaff = async () => {
       try {
@@ -295,16 +294,16 @@ export default defineComponent({
       }
     };
 
-    const addStaff = async (staff_form) =>{
+    const addStaff = async (staff_form) => {
       try {
-        console.log(staff_form)
-        await postStaff(staff_form)
-        staff_list.value = await getStaffList()
-        notifySuccess("Supplier Added!")
+        console.log(staff_form);
+        await postStaff(staff_form);
+        staff_list.value = await getStaffList();
+        notifySuccess("Staff Added!");
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
-    }
+    };
     // When view is mounted, call methods below
     onMounted(() => {
       mapStaff();

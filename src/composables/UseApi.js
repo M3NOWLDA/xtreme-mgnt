@@ -7,7 +7,7 @@ export default function useApi() {
       return response.data;
     } catch (error) {
       console.log(error);
-      return error
+      return error;
     }
   };
 
@@ -17,7 +17,7 @@ export default function useApi() {
       return response.data;
     } catch (error) {
       console.log(error);
-      return error
+      return error;
     }
   };
 
@@ -27,7 +27,7 @@ export default function useApi() {
       return response.data;
     } catch (error) {
       console.log(error);
-      return error
+      return error;
     }
   };
 
@@ -37,44 +37,54 @@ export default function useApi() {
       return response.data;
     } catch (error) {
       console.log(error);
-      return error
+      return error;
     }
   };
 
-  const postClient = async(cliform) => {
+  const postClient = async (cliform) => {
+    try {
+      const resp = await axios.post(process.env.API_M3_NCLI, cliform);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
+  const postService = async (s_form) => {
     try {
-        const resp = await axios.post(process.env.API_M3_NCLI, cliform)
+      const response = await axios.post(process.env.API_M3_NSER, s_form);
+      return response.status;
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-  }
+  };
 
-  const postService = async(s_form) => {
+  const postSupplier = async (sup_form) => {
     try {
-        const response = await axios.post(process.env.API_M3_NSER, s_form)
-        return response.status
+      const response = await axios.post(process.env.API_M3_NSUP, sup_form);
+      return response.status;
     } catch (error) {
-        console.log(error)
+      console.log(error);
     }
-  }
+  };
+  const postStaff = async (st_form) => {
+    try {
+      const response = await axios.post(process.env.API_M3_NSTF, st_form);
+      return response.status;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const postSupplier = async(sup_form) => {
+  const getServiceByFilter = async (filter) => {
     try {
-        const response = await axios.post(process.env.API_M3_NSUP, sup_form)
-        return response.status
+      const response = await axios.get(process.env.API_M3_SBF, {params : {filter}})
+      return response.data;
     } catch (error) {
-        console.log(error)
+      console.log(error);
+      return error;
     }
-  }
-  const postStaff = async(st_form) => {
-    try {
-        const response = await axios.post(process.env.API_M3_NSTF, st_form)
-        return response.status
-    } catch (error) {
-        console.log(error)
-    }
-  }
+  };
+
 
   return {
     getClientList,
@@ -84,6 +94,7 @@ export default function useApi() {
     postClient,
     postService,
     postSupplier,
-    postStaff
+    postStaff,
+    getServiceByFilter,
   };
 }
