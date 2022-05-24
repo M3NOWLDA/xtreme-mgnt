@@ -69,6 +69,11 @@ const routes = [
         name: "staff",
         component: () => import("pages/StaffPage.vue"),
       },
+      {
+        path: "servicehistory",
+        name: "servicehistory",
+        component: () => import("pages/ServiceHistory.vue"),
+      },
     ],
     meta: {
       requiresAuth: true,

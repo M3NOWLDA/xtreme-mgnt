@@ -77,7 +77,9 @@ export default function useApi() {
 
   const getServiceByFilter = async (filter) => {
     try {
-      const response = await axios.get(process.env.API_M3_SBF, {params : {filter}})
+      const response = await axios.get(process.env.API_M3_SBF, {
+        params: { filter },
+      });
       return response.data;
     } catch (error) {
       console.log(error);
@@ -85,6 +87,17 @@ export default function useApi() {
     }
   };
 
+  const getServiceHistoryByID = async (service_id) => {
+    try {
+      const response = await axios.get(process.env.API_M3_SHBI, {
+        params: { service_id },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  };
 
   return {
     getClientList,
@@ -96,5 +109,6 @@ export default function useApi() {
     postSupplier,
     postStaff,
     getServiceByFilter,
+    getServiceHistoryByID,
   };
 }
