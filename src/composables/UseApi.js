@@ -170,10 +170,10 @@ export default function useApi() {
     }
   };
 
-  const getBudgetList_by_username = async (username) => {
+  const getBudgetList_by_username = async (service_id) => {
     try {
-      const response = await axios.get(process.env.API_M3_GSBCI, {
-        params: { username },
+      const response = await axios.get(process.env.API_M3_GBLBSI, {
+        params: { service_id },
       });
       return response.data;
     } catch (error) {

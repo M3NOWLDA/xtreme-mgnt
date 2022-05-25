@@ -64,6 +64,7 @@ module.exports = configure(function(ctx) {
                 API_M3_SBF: "https://apim3.azurewebsites.net/Service/ServiceByFilter",
                 API_M3_SHBI: "https://apim3.azurewebsites.net/Service/ServiceHistory",
                 API_M3_GSBCI: "https://apim3.azurewebsites.net/Service/ServiceByClient",
+                API_M3_GBLBSI: "https://apim3.azurewebsites.net/Service/ServiceBudget",
             },
 
             // transpile: false,

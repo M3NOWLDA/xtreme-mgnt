@@ -144,13 +144,6 @@
                 <q-td colspan="100%">
                   <div class="row text-center q-mt-sm q-mb-sm">
                     <q-btn
-                      @click="
-                        bar2 = true;
-                        mapServicesHistory(props.row.ServiceId);
-                      "
-                      label="Info"
-                    ></q-btn>
-                    <q-btn
                       v-if="props.row.State != 'done'"
                       text-color="black"
                       class="q-ml-sm"
@@ -158,7 +151,7 @@
                       glossy
                       color="red"
                       icon="pending"
-                      @click="change_state(props.row.ServiceId, 'to_execute')"
+                      @click="change_state(props.row.Service_id, 'to_execute')"
                     ></q-btn>
                     <q-btn
                       v-if="props.row.State != 'done'"
@@ -168,7 +161,7 @@
                       glossy
                       color="green"
                       icon="verified"
-                      @click="change_state(props.row.ServiceId, 'done')"
+                      @click="change_state(props.row.Service_id, 'done')"
                     ></q-btn>
                   </div>
                 </q-td>
@@ -191,14 +184,14 @@ const columns3 = [
     name: "id",
     label: "ID",
     align: "left",
-    field: "id",
+    field: "Id",
     sortable: true,
   },
   {
     name: "serviceid",
     align: "center",
     label: "Service ID",
-    field: "service_id",
+    field: "Service_id",
     sortable: true,
   },
   {
@@ -212,7 +205,7 @@ const columns3 = [
     name: "Report",
     align: "center",
     label: "Report",
-    field: "budget_report",
+    field: "Report",
     sortable: true,
   },
 ];
@@ -313,12 +306,13 @@ export default defineComponent({
     const historyList = ref([]);
     const budgetList = ref([]);
     const open_table = ref(false);
-    var value = "rcruz";
+    var value = "mmacgilfoylenx";
     const {
       getServiceHistoryByID,
       getServiceList_by_username,
-      mapBudgets_by_username,
+      getBudgetList_by_username,
       getServiceList,
+      service_state,
     } = useApi();
 
     const change_state = async (service_id, state) => {
