@@ -151,7 +151,7 @@
                       glossy
                       color="red"
                       icon="pending"
-                      @click="change_state(props.row.Service_id, 'to_execute')"
+                      @click="change_state()"
                     ></q-btn>
                     <q-btn
                       v-if="props.row.State != 'done'"
@@ -161,7 +161,7 @@
                       glossy
                       color="green"
                       icon="verified"
-                      @click="change_state(props.row.Service_id, 'done')"
+                      @click="change_state(props.row.Service_id, 'to_execute')"
                     ></q-btn>
                   </div>
                 </q-td>
