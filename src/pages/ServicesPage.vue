@@ -134,11 +134,12 @@
               <q-btn class="q-ml-sm" label="Delete"></q-btn>
               <q-btn class="q-ml-sm" label="Orders"></q-btn>
 
-                <q-btn text-color="black" style="margin-left: auto" stack glossy color="yellow" icon="paid"></q-btn>
-                <q-btn text-color="black" class="q-ml-sm" stack glossy color="blue"  icon="hourglass_bottom"></q-btn>
-                <q-btn text-color="black" class="q-ml-sm" stack glossy color="orange"  icon="local_shipping"></q-btn>
-                <q-btn text-color="black" class="q-ml-sm" stack glossy color="red" icon="pending"></q-btn>
-                <q-btn text-color="black" class="q-ml-sm" stack glossy color="green"  icon="fact_check"></q-btn>
+                <q-btn v-if="props.row.State != 'done'" text-color="black" style="margin-left: auto" stack glossy color="yellow" icon="paid" @click="change_state(props.row.ServiceId, 'to_budget')"></q-btn>
+                <q-btn v-if="props.row.State != 'done'" text-color="black" class="q-ml-sm" stack glossy color="blue"  icon="hourglass_bottom" @click="change_state(props.row.ServiceId, 'to_budget_approval')"></q-btn>
+                <q-btn v-if="props.row.State != 'done'" text-color="black" class="q-ml-sm" stack glossy color="orange" icon="local_shipping" @click="change_state(props.row.ServiceId, 'waiting_order')"></q-btn>
+                <q-btn v-if="props.row.State != 'done'" text-color="black" class="q-ml-sm" stack glossy color="red" icon="pending" @click="change_state(props.row.ServiceId, 'to_execute')"></q-btn>
+                <q-btn v-if="props.row.State != 'done'" text-color="black" class="q-ml-sm" stack glossy color="green"  icon="fact_check" @click="change_state(props.row.ServiceId, 'to_pickup')"></q-btn>
+                <q-btn v-if="props.row.State != 'done'" text-color="black" class="q-ml-sm" stack glossy color="green"  icon="verified" @click="change_state(props.row.ServiceId, 'done')"></q-btn>
             </div>
           </q-td>
         </q-tr>
@@ -182,6 +183,13 @@ const columns = [
     field: "Status",
     sortable: true,
   },
+    {
+    name: "state",
+    align: "center",
+    label: "Service_State",
+    field: "State",
+    sortable: true,
+  },
   {
     name: "date",
     align: "center",
@@ -195,7 +203,7 @@ export default defineComponent({
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const serviceList = ref([]);
-    const { getServiceList, postService } = useApi();
+    const { getServiceList, postService, service_state } = useApi();
 
     // Reactive form for client data inputs
     const s_form = ref({
@@ -237,6 +245,21 @@ export default defineComponent({
       }
     }
 
+    const change_state = async(service_id , state) =>{
+      console.log(service_id, state)
+      try{
+        const code_resp = await service_state(service_id, state)
+        if(code_resp == 200){
+          serviceList.value = await getServiceList();
+          notifySuccess("state updated!")
+        }else{
+          notifyError("Error in change state")
+        }
+      }catch(error){
+        console.log(error)
+      }
+    }
+
     // When view is mounted, call methods below
     onMounted(() => {
       mapServices();
@@ -244,8 +267,10 @@ export default defineComponent({
     return {
       s_form,
       columns,
+      filter: ref([]),
       serviceList,
       addService,
+      change_state,
       items:[
         'Manutenção Equip', 'Reparação Equip', 'Diagonóstico', 'Montagem Equip'
       ],
