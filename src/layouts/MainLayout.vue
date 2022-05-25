@@ -13,7 +13,7 @@
                 <q-item-label>Logout</q-item-label>
               </q-item-section>
             </q-item>
-            <q-item clickable v-close-popup>
+            <q-item clickable v-close-popup to="/client-services">
               <q-item-section>
                 <q-item-label>Account</q-item-label>
               </q-item-section>
