@@ -23,6 +23,18 @@ export default function useApi() {
         }
     };
 
+    const getServiceList_by_char = async(type, value) => {
+        try {
+            const response = await axios.get(process.env.API_M3_GSBC, {
+                params: { type, value },
+            });
+            return response.data;
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    };
+
     const getServiceList = async() => {
         try {
             const response = await axios.get(process.env.API_M3_GSER);
@@ -126,6 +138,7 @@ export default function useApi() {
     return {
         getClientList,
         getClientList_by_char,
+        getServiceList_by_char,
         getServiceList,
         service_state,
         getStaffList,

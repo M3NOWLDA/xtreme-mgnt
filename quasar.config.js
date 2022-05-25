@@ -52,6 +52,7 @@ module.exports = configure(function(ctx) {
                 API_M3_GCBC: "https://apim3.azurewebsites.net/Client/ClientByChar",
                 API_M3_NCLI: "https://apim3.azurewebsites.net/Client/NewClient",
                 API_M3_GSER: "https://apim3.azurewebsites.net/Service/ServiceList",
+                API_M3_GSBC: "https://apim3.azurewebsites.net/Service/ServiceByChar",
                 API_M3_NSER: "https://apim3.azurewebsites.net/Service/NewService",
                 API_M3_USST: "https://apim3.azurewebsites.net/Service/UpdateServiceState",
                 API_M3_GSTF: "https://apim3.azurewebsites.net/Staff/EmployeeList",

@@ -1,30 +1,43 @@
 <template>
   <q-page padding>
-    <div class="row">
-      <q-btn
-        color="primary"
-        label="Register New Service"
-        @click="prompt = true"
-      ></q-btn>
-      <q-space />
-      <q-input
-        outlined
-        dense
-        debounce="300"
-        v-model="filter"
-        placeholder="Search"
-        class="q-mr-sm"
-      >
-        <template v-slot:append>
-          <q-icon name="mdi-magnify" />
-        </template>
-    </q-input>
+       <div class="row q-ml-auto" style="height: 30px" >
+        <q-btn
+          class="q-ml-md"
+          color="primary"
+          style="height: 10%"
+          label="Add New Service"
+          @click="prompt = true"
+        ></q-btn>
+
+        <label class="q-ml-xl q-pl-xl q-mt-sm " style="margin-left: 30% ; font-size: 17px " dense>Search Service</label>
+        <q-input
+            filled
+            class="q-ml-lg"
+            style="width: 300px"
+            v-model="input"
+            dense
+            @input="isTyping = true"
+            type="text"
+            label="Value"
+            required>
+        </q-input>
+        <q-select
+            filled
+            style="width: 300px"
+            class="q-ml-md"
+            dense
+            v-model="input_type"
+            :options="items_aux"
+            :rules="nameRules"
+            label="Item"
+            required>
+        </q-select>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
       <q-form @submit.prevent="addService(s_form)">
         <q-card-section>
-          <div class="text-h6">Add Services</div>
+          <div class="text-h6">Add Service</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
           <q-select
@@ -91,7 +104,7 @@
       </q-card>
     </q-dialog>
 
-<div class="q-pa-md">
+<div class="q-pa-md q-mt-sm">
       <q-table
         title="All Services Register"
         :rows="serviceList"
@@ -200,10 +213,17 @@ const columns = [
 ];
 export default defineComponent({
   name: "ServicesPage",
+
+  data(){
+    return{
+      input: '',
+      input_type: '',
+    }
+  },
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const serviceList = ref([]);
-    const { getServiceList, postService, service_state } = useApi();
+    const { getServiceList, postService, service_state, getServiceList_by_char } = useApi();
 
     // Reactive form for client data inputs
     const s_form = ref({
@@ -220,6 +240,14 @@ export default defineComponent({
       try {
         serviceList.value = await getServiceList();
         if (serviceList.value != null) notifySuccess("Services Loaded");
+      } catch (error) {
+        notifyError(error);
+      }
+    };
+
+    const mapServices_by_char = async (type, value) => {
+      try {
+        serviceList.value = await getServiceList_by_char(type, value);
       } catch (error) {
         notifyError(error);
       }
@@ -266,6 +294,8 @@ export default defineComponent({
       mapServices();
     });
     return {
+      mapServices,
+      mapServices_by_char,
       s_form,
       columns,
       filter: ref([]),
@@ -278,6 +308,9 @@ export default defineComponent({
       items_2:[
         'Active', 'Inactive'
       ],
+      items_aux:[
+        'Id', 'Client Id', 'Status', 'Start Date', 'End Date', 'Type', 'State'
+      ],
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
       prompt: ref(false),
       MyPagination: {
@@ -285,7 +318,15 @@ export default defineComponent({
       },
     };
   },
-
+  watch:{
+    input(value){
+      if(value != ""){
+        this.mapServices_by_char(this.input_type , value)
+      }else{
+        this.mapServices()
+      }
+    }
+  }
 });
 </script>
 

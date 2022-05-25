@@ -31,7 +31,7 @@
             label="Item"
             required>
         </q-select>
-      </div>
+    </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
         <q-form @submit.prevent="addClient(cliForm)">
