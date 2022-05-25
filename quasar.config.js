@@ -63,6 +63,7 @@ module.exports = configure(function(ctx) {
                 API_M3_NSUP: "https://apim3.azurewebsites.net/Supplier/NewSupplier",
                 API_M3_SBF: "https://apim3.azurewebsites.net/Service/ServiceByFilter",
                 API_M3_SHBI: "https://apim3.azurewebsites.net/Service/ServiceHistory",
+                API_M3_GSBCI: "https://apim3.azurewebsites.net/Service/ServiceByClient",
             },
 
             // transpile: false,

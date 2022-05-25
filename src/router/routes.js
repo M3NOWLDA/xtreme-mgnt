@@ -33,6 +33,11 @@ const routes = [
         name: "reset-password",
         component: () => import("pages/ResetPassword.vue"),
       },
+      {
+        path: "client-services",
+        name: "client-services",
+        component: () => import("pages/ClientWebPage.vue"),
+      },
     ],
   },
   {

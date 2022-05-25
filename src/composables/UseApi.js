@@ -158,6 +158,17 @@ export default function useApi() {
             return error;
         }
     };
+  const getServiceList_by_username = async(username) => {
+    try {
+        const response = await axios.get(process.env.API_M3_GSBCI, {
+            params: { username },
+        });
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        return error;
+    }
+};
 
     return {
         getClientList,
@@ -175,5 +186,6 @@ export default function useApi() {
         postStaff,
         getServiceByFilter,
         getServiceHistoryByID,
+        getServiceList_by_username
     };
 }
