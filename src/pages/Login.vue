@@ -34,6 +34,13 @@
           type="submit"
           to="/forgot-password"
         />
+        <q-btn
+          label="Service History"
+          color="grey"
+          class="full-width"
+          type="submit"
+          to="/client-services"
+        />
       </div>
     </q-form>
   </q-page>
@@ -62,9 +69,9 @@ export default defineComponent({
 
     onMounted(() => {
       if (isLoggedIn) {
-        router.push({ name: 'me' })
+        router.push({ name: "me" });
       }
-    })
+    });
 
     const handleLogin = async () => {
       try {
