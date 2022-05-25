@@ -1,25 +1,35 @@
 <template>
   <q-page padding>
-    <div class="row">
-      <q-btn
-        color="primary"
-        label="Add New Supplier"
-        @click="prompt = true"
-      ></q-btn>
-
-      <q-space />
-      <q-input
-        outlined
-        dense
-        debounce="300"
-        v-model="filter"
-        placeholder="Search"
-        class="q-mr-sm"
-      >
-        <template v-slot:append>
-          <q-icon name="mdi-magnify" />
-        </template>
-      </q-input>
+    <div class="row q-ml-auto" style="height: 30px" >
+        <q-btn
+          color="primary"
+          style="height: 10%"
+          label="Add New Supplier"
+          @click="prompt = true"
+        ></q-btn>
+        <label class="q-ml-xl q-pl-xl q-mt-sm " style="margin-left: 31% ; font-size: 17px " dense>Search Supplier</label>
+        <q-input
+            filled
+            class="q-ml-lg"
+            style="width: 300px"
+            v-model="input"
+            dense
+            @input="isTyping = true"
+            type="text"
+            label="Value"
+            required>
+        </q-input>
+        <q-select
+            filled
+            style="width: 300px"
+            class="q-ml-md"
+            dense
+            v-model="input_type"
+            :options="items"
+            :rules="nameRules"
+            label="Item"
+            required>
+        </q-select>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -141,7 +151,7 @@
       </q-card>
     </q-dialog>
 
-    <div id="divTable" class="row q-mt-md">
+    <div id="divTable" class="row q-mt-lg">
       <q-table
         class="col fixed-header"
         title="Suppliers"
@@ -191,14 +201,14 @@ const columns = [
   {
     name: "address",
     align: "center",
-    label: "Register Date",
+    label: "Address",
     field: "Addressline",
     sortable: true,
   },
   {
     name: "city",
     align: "center",
-    label: "Local",
+    label: "City",
     field: "City",
     sortable: true,
   },
@@ -213,10 +223,18 @@ const columns = [
 ];
 export default defineComponent({
   name: "OrdersPage",
+
+  data(){
+    return{
+      input: '',
+      input_type: '',
+    }
+  },
+
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const supplier_list = ref([]);
-    const { getSupplierList, postSupplier } = useApi();
+    const { getSupplierList, postSupplier, getSupplierList_by_char } = useApi();
 
     const sup_form = ref({
       businessName: "",
@@ -238,6 +256,14 @@ export default defineComponent({
       }
     };
 
+    const mapSupplier_by_char = async (type, value) => {
+      try {
+        supplier_list.value = await getSupplierList_by_char(type, value);
+      } catch (error) {
+        notifyError(error);
+      }
+    };
+
     const addSupplier = async (sup_form) =>{
       try {
         console.log(sup_form)
@@ -253,15 +279,29 @@ export default defineComponent({
       mapSupplier();
     });
     return {
+      mapSupplier,
+      mapSupplier_by_char,
       sup_form,
       columns,
       addSupplier,
       supplier_list,
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
+      items:[
+        'Id', 'Business Name', 'Business Type', 'Nif', 'Address', 'City', 'Delivery Average'
+      ],
       prompt: ref(false),
       secondDialog: ref(false),
     };
   },
+  watch:{
+    input(value){
+      if(value != ""){
+        this.mapSupplier_by_char(this.input_type , value)
+      }else{
+        this.mapSupplier()
+      }
+    }
+  }
 });
 </script>
 

@@ -1,25 +1,35 @@
 <template>
   <q-page padding>
-    <div class="row">
-      <q-btn
-        color="primary"
-        label="Add New Staff"
-        @click="prompt = true"
-      ></q-btn>
-
-      <q-space />
-      <q-input
-        outlined
-        dense
-        debounce="300"
-        v-model="filter"
-        placeholder="Search"
-        class="q-mr-sm"
-      >
-        <template v-slot:append>
-          <q-icon name="mdi-magnify" />
-        </template>
-      </q-input>
+<div class="row q-ml-auto" style="height: 30px" >
+        <q-btn
+          color="primary"
+          style="height: 10%"
+          label="Add New Staff"
+          @click="prompt = true"
+        ></q-btn>
+        <label class="q-ml-xl q-pl-xl q-mt-sm " style="margin-left: 31.8% ; font-size: 17px " dense>Search Employee</label>
+        <q-input
+            filled
+            class="q-ml-lg"
+            style="width: 300px"
+            v-model="input"
+            dense
+            @input="isTyping = true"
+            type="text"
+            label="Value"
+            required>
+        </q-input>
+        <q-select
+            filled
+            style="width: 300px"
+            class="q-ml-md"
+            dense
+            v-model="input_type"
+            :options="items"
+            :rules="nameRules"
+            label="Item"
+            required>
+        </q-select>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -167,10 +177,10 @@
       </q-card>
     </q-dialog>
 
-    <div id="divTable" class="row q-mt-md">
+    <div id="divTable" class="row q-mt-lg">
       <q-table
         class="col fixed-header"
-        title="Suppliers"
+        title="Staff"
         :rows="staff_list"
         :columns="columns"
         dense
@@ -266,10 +276,18 @@ const columns = [
 ];
 export default defineComponent({
   name: "OrdersPage",
+
+  data(){
+    return{
+      input: '',
+      input_type: '',
+    }
+  },
+
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const staff_list = ref([]);
-    const { getStaffList, postStaff } = useApi();
+    const { getStaffList, postStaff, getStaffList_by_char } = useApi();
 
     const staff_form = ref({
       username: "",
@@ -285,10 +303,19 @@ export default defineComponent({
       country: "",
       jobTitle: "",
     });
+
     const mapStaff = async () => {
       try {
         staff_list.value = await getStaffList();
-        if (staff_list.value != null) notifySuccess("Clients Loaded");
+        if (staff_list.value != null) notifySuccess("Staff List Loaded");
+      } catch (error) {
+        notifyError(error);
+      }
+    };
+
+    const mapStaff_by_char = async (type, value) => {
+      try {
+        staff_list.value = await getStaffList_by_char(type, value);
       } catch (error) {
         notifyError(error);
       }
@@ -309,15 +336,29 @@ export default defineComponent({
       mapStaff();
     });
     return {
+      mapStaff,
+      mapStaff_by_char,
       staff_form,
       columns,
       addStaff,
       staff_list,
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
+      items:[
+        'Id', 'Username', 'First Name', 'Surname', 'Job Tittle','Nif', 'Email', 'Phone', 'Address', 'City', 'State', 'Country'
+      ],
       prompt: ref(false),
       secondDialog: ref(false),
     };
   },
+  watch:{
+    input(value){
+      if(value != ""){
+        this.mapStaff_by_char(this.input_type , value)
+      }else{
+        this.mapStaff()
+      }
+    }
+  }
 });
 </script>
 
