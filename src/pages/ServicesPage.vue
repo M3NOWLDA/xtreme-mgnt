@@ -144,8 +144,8 @@
             <div class=" row text-left q-mt-sm q-mb-sm">
               <q-btn label="+Info"></q-btn>
               <q-btn class="q-ml-sm" label="Update"></q-btn>
-              <q-btn class="q-ml-sm" label="Delete"></q-btn>
               <q-btn class="q-ml-sm" label="Orders"></q-btn>
+              <q-btn class="q-ml-sm" label="History"></q-btn>
 
                 <q-btn v-if="props.row.State != 'done'" text-color="black" style="margin-left: auto" stack glossy color="yellow" icon="paid" @click="change_state(props.row.ServiceId, 'to_budget')"></q-btn>
                 <q-btn v-if="props.row.State != 'done'" text-color="black" class="q-ml-sm" stack glossy color="blue"  icon="hourglass_bottom" @click="change_state(props.row.ServiceId, 'to_budget_approval')"></q-btn>
