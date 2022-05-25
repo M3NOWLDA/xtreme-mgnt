@@ -84,7 +84,7 @@
         </q-card-section>
         <q-card-actions align="right" class="text-primary">
           <q-btn flat label="Cancel" v-close-popup />
-          <q-btn flat label="Add Service"  type="submit" v-close-popup />
+          <q-btn v-if="s_form.endDate != '' && s_form.startDate != '' && s_form.observations != '' && s_form.status != '' && s_form.clientId != '' && s_form.type != ''" flat label="Add Service"  type="submit" v-close-popup />
         </q-card-actions>
       </q-form>
 
@@ -211,6 +211,7 @@ export default defineComponent({
       type: "",
       clientId: "",
       status: "",
+      state: 'to_budget',
       observations: "",
       startDate: "",
       endDate: "",
@@ -225,10 +226,10 @@ export default defineComponent({
     };
 
     const addService = async (s_form) =>{
-      if     (s_form.type == 'Reparação Equip')      s_form.typeId = 1;
-      else if(s_form.type == 'Diagnóstico') s_form.typeId = 2;
-      else if(s_form.type == 'Manutenção Equip')  s_form.typeId = 3;
-      else if(s_form.type == 'Montagem Equip')    s_form.typeId = 4;
+      if     (s_form.type == 'Reparação Equip')       s_form.typeId = 1;
+      else if(s_form.type == 'Diagnóstico')           s_form.typeId = 2;
+      else if(s_form.type == 'Manutenção Equip')      s_form.typeId = 3;
+      else if(s_form.type == 'Montagem Equip')        s_form.typeId = 4;
 
       if(s_form.status == 'Active') s_form.status = 1
       else if (s_form.status == 'Inactive') s_form.status = 0
@@ -284,6 +285,7 @@ export default defineComponent({
       },
     };
   },
+
 });
 </script>
 
