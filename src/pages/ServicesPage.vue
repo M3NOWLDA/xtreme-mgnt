@@ -91,18 +91,61 @@
       </q-card>
     </q-dialog>
 
-    <div id="divTable" class="row q-mt-md">
+<div class="q-pa-md">
       <q-table
-        class="col fixed-header"
-        title="Services"
+        title="All Services Register"
         :rows="serviceList"
         :columns="columns"
         dense
-        :pagination="MyPagination"
         :rows-per-page-options="[50, 75, 100, 150, 200]"
         row-key="id"
-      />
-    </div>
+      >
+      <template v-slot:header="props">
+        <q-tr :props="props">
+          <q-th auto-width />
+          <q-th
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+          >
+            {{ col.label }}
+          </q-th>
+        </q-tr>
+      </template>
+
+      <template v-slot:body="props">
+        <q-tr :props="props">
+          <q-td auto-width>
+            <q-btn size="sm" color="accent" round dense @click="props.row.expand = !props.row.expand" :icon="props.row.expand ? 'remove' : 'add'" />
+          </q-td>
+          <q-td
+            v-for="col in props.cols"
+            :key="col.name"
+            :props="props"
+          >
+            {{ col.value }}
+          </q-td>
+        </q-tr>
+        <q-tr v-show="props.row.expand" :props="props">
+          <q-td colspan="100%">
+            <div class=" row text-left q-mt-sm q-mb-sm">
+              <q-btn label="+Info"></q-btn>
+              <q-btn class="q-ml-sm" label="Update"></q-btn>
+              <q-btn class="q-ml-sm" label="Delete"></q-btn>
+              <q-btn class="q-ml-sm" label="Orders"></q-btn>
+
+                <q-btn text-color="black" style="margin-left: auto" stack glossy color="yellow" icon="paid"></q-btn>
+                <q-btn text-color="black" class="q-ml-sm" stack glossy color="blue"  icon="hourglass_bottom"></q-btn>
+                <q-btn text-color="black" class="q-ml-sm" stack glossy color="orange"  icon="local_shipping"></q-btn>
+                <q-btn text-color="black" class="q-ml-sm" stack glossy color="red" icon="pending"></q-btn>
+                <q-btn text-color="black" class="q-ml-sm" stack glossy color="green"  icon="fact_check"></q-btn>
+            </div>
+          </q-td>
+        </q-tr>
+      </template>
+
+    </q-table>
+  </div>
   </q-page>
 </template>
 
