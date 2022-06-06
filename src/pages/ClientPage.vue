@@ -1,36 +1,49 @@
 <template>
   <q-page padding>
-    <div class="row q-ml-auto" style="height: 30px" >
-        <q-btn
-          color="primary"
-          style="height: 10%"
-          label="Add New Client"
-          @click="prompt = true"
-        ></q-btn>
+    <div class="row q-ml-auto" style="height: 30px">
+      <q-btn
+        color="primary"
+        style="height: 10%"
+        label="Add New Client"
+        @click="prompt = true"
+      ></q-btn>
+      <q-btn
+        color="primary"
+        style="height: 10%; margin-left: 1%"
+        label="Update Client"
+        @click="prompt = true"
+      ></q-btn>
 
-        <label class="q-ml-xl q-pl-xl q-mt-sm " style="margin-left: 33% ; font-size: 17px " dense>Search Client</label>
-        <q-input
-            filled
-            class="q-ml-lg"
-            style="width: 300px"
-            v-model="input"
-            dense
-            @input="isTyping = true"
-            type="text"
-            label="Value"
-            required>
-        </q-input>
-        <q-select
-            filled
-            style="width: 300px"
-            class="q-ml-md"
-            dense
-            v-model="input_type"
-            :options="items"
-            :rules="nameRules"
-            label="Item"
-            required>
-        </q-select>
+      <label
+        class="q-ml-xl q-pl-xl q-mt-sm"
+        style="margin-left: 33%; font-size: 17px"
+        dense
+        >Search Client</label
+      >
+      <q-input
+        filled
+        class="q-ml-lg"
+        style="width: 300px"
+        v-model="input"
+        dense
+        @input="isTyping = true"
+        type="text"
+        label="Value"
+        required
+      >
+      </q-input>
+      <q-select
+        filled
+        style="width: 300px"
+        class="q-ml-md"
+        dense
+        v-model="input_type"
+        :options="items"
+        :rules="nameRules"
+        label="Item"
+        required
+      >
+      </q-select>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -143,10 +156,9 @@
 
           <q-card-actions align="right" class="text-primary">
             <q-btn flat label="Cancel" v-close-popup />
-            <q-btn flat label="Add Client" type="submit"/>
+            <q-btn flat label="Add Client" type="submit" />
           </q-card-actions>
         </q-form>
-
       </q-card>
     </q-dialog>
     <q-dialog
@@ -242,11 +254,11 @@ const columns = [
 export default defineComponent({
   name: "ClientPage",
 
-  data(){
-    return{
-      input: '',
-      input_type: '',
-    }
+  data() {
+    return {
+      input: "",
+      input_type: "",
+    };
   },
 
   setup() {
@@ -284,11 +296,11 @@ export default defineComponent({
     };
     const addClient = async (cliForm) => {
       try {
-        await postClient(cliForm)
-        clientList.value = await getClientList()
-        notifySuccess("Client Added!")
+        await postClient(cliForm);
+        clientList.value = await getClientList();
+        notifySuccess("Client Added!");
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     };
     const updateClient = () => {};
@@ -305,22 +317,28 @@ export default defineComponent({
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
       addClient,
       updateClient,
-      items:[
-        'Id', 'Username', 'First Name', 'Surname', 'Nif', 'Email', 'Phone'
+      items: [
+        "Id",
+        "Username",
+        "First Name",
+        "Surname",
+        "Nif",
+        "Email",
+        "Phone",
       ],
       prompt: ref(false),
       secondDialog: ref(false),
     };
   },
-  watch:{
-    input(value){
-      if(value != ""){
-        this.mapClients_by_char(this.input_type , value)
-      }else{
-        this.mapClients()
+  watch: {
+    input(value) {
+      if (value != "") {
+        this.mapClients_by_char(this.input_type, value);
+      } else {
+        this.mapClients();
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

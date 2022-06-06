@@ -117,7 +117,7 @@ export default function useApi() {
   const postStaff = async (st_form) => {
     try {
       const response = await axios.post(process.env.API_M3_NSTF, st_form);
-      return response.status;
+      return response.data;
     } catch (error) {
       console.log(error);
     }
@@ -135,10 +135,10 @@ export default function useApi() {
     }
   };
 
-  const service_state = async (service_id, state) => {
+  const service_state = async (service_id, employee_id, state) => {
     try {
       const response = await axios.get(process.env.API_M3_USST, {
-        params: { service_id, state },
+        params: { service_id, employee_id, state },
       });
       return response.status;
     } catch (error) {
@@ -182,6 +182,30 @@ export default function useApi() {
     }
   };
 
+  const getServiceOrdersByID = async (service_id) => {
+    try {
+      const response = await axios.get(process.env.API_M3_GOBS, {
+        params: { service_id },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  };
+
+  const getServiceBudgetsByID = async (service_id) => {
+    try {
+      const response = await axios.get(process.env.API_M3_GBBS, {
+        params: { service_id },
+      });
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  };
+
   return {
     getClientList,
     getClientList_by_char,
@@ -200,5 +224,7 @@ export default function useApi() {
     getServiceHistoryByID,
     getServiceList_by_username,
     getBudgetList_by_username,
+    getServiceOrdersByID,
+    getServiceBudgetsByID,
   };
 }

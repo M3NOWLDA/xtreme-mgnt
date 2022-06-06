@@ -1,35 +1,42 @@
 <template>
   <q-page padding>
-<div class="row q-ml-auto" style="height: 30px" >
-        <q-btn
-          color="primary"
-          style="height: 10%"
-          label="Add New Staff"
-          @click="prompt = true"
-        ></q-btn>
-        <label class="q-ml-xl q-pl-xl q-mt-sm " style="margin-left: 31.8% ; font-size: 17px " dense>Search Employee</label>
-        <q-input
-            filled
-            class="q-ml-lg"
-            style="width: 300px"
-            v-model="input"
-            dense
-            @input="isTyping = true"
-            type="text"
-            label="Value"
-            required>
-        </q-input>
-        <q-select
-            filled
-            style="width: 300px"
-            class="q-ml-md"
-            dense
-            v-model="input_type"
-            :options="items"
-            :rules="nameRules"
-            label="Item"
-            required>
-        </q-select>
+    <div class="row q-ml-auto" style="height: 30px">
+      <q-btn
+        color="primary"
+        style="height: 10%"
+        label="Add New Staff"
+        @click="prompt = true"
+      ></q-btn>
+      <label
+        class="q-ml-xl q-pl-xl q-mt-sm"
+        style="margin-left: 31.8%; font-size: 17px"
+        dense
+        >Search Employee</label
+      >
+      <q-input
+        filled
+        class="q-ml-lg"
+        style="width: 300px"
+        v-model="input"
+        dense
+        @input="isTyping = true"
+        type="text"
+        label="Value"
+        required
+      >
+      </q-input>
+      <q-select
+        filled
+        style="width: 300px"
+        class="q-ml-md"
+        dense
+        v-model="input_type"
+        :options="items"
+        :rules="nameRules"
+        label="Item"
+        required
+      >
+      </q-select>
     </div>
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
@@ -52,7 +59,7 @@
               autofocus
               dense
               clearable
-              v-model="staff_form.firstname"
+              v-model="staff_form.firstName"
               type="text"
               label="First Name"
               :rules="nameRules"
@@ -79,8 +86,17 @@
               autofocus
               dense
               clearable
+              v-model="user_staff_form.password"
+              type="password"
+              label="Password"
+              :rules="nameRules"
+            ></q-input>
+            <q-input
+              autofocus
+              dense
+              clearable
               v-model="staff_form.phone"
-              type="text"
+              type="number"
               label="Phone"
               :rules="nameRules"
             ></q-input>
@@ -116,7 +132,7 @@
               dense
               clearable
               v-model="staff_form.zipcode"
-              type="text"
+              type="number"
               label="ZIP Code"
               :rules="nameRules"
             ></q-input>
@@ -195,6 +211,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import useNotify from "src/composables/UseNotify";
 import useApi from "src/composables/UseApi";
+import useAuthUser from "src/composables/UseAuthUser";
 const columns = [
   {
     name: "EmployeeId",
@@ -277,31 +294,39 @@ const columns = [
 export default defineComponent({
   name: "OrdersPage",
 
-  data(){
-    return{
-      input: '',
-      input_type: '',
-    }
+  data() {
+    return {
+      input: "",
+      input_type: "",
+    };
   },
 
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const staff_list = ref([]);
     const { getStaffList, postStaff, getStaffList_by_char } = useApi();
+    const { user, register } = useAuthUser();
 
     const staff_form = ref({
       username: "",
-      firstname: "",
+      firstName: "",
       surname: "",
       email: "",
       phone: "",
       nif: "",
+      jobTitle: "",
       addressline: "",
       zipcode: "",
       city: "",
       district: "",
       country: "",
-      jobTitle: "",
+    });
+
+    const user_staff_form = ref({
+      password: "",
+      name: "",
+      email: "",
+      emp_id: "",
     });
 
     const mapStaff = async () => {
@@ -324,9 +349,21 @@ export default defineComponent({
     const addStaff = async (staff_form) => {
       try {
         console.log(staff_form);
-        await postStaff(staff_form);
-        staff_list.value = await getStaffList();
+        const response = await postStaff(staff_form);
+        user_staff_form.value.emp_id = response;
+        user_staff_form.value.name = staff_form.firstName;
+        user_staff_form.value.email = staff_form.email;
+
+        console.log(response);
+        await register(user_staff_form.value);
+            notifySuccess()
+              router.push({
+                name: "email-confirmation",
+                query: { email: user_staff_form.value.email },
+              });
+
         notifySuccess("Staff Added!");
+        staff_list.value = await getStaffList();
       } catch (error) {
         console.log(error);
       }
@@ -336,29 +373,42 @@ export default defineComponent({
       mapStaff();
     });
     return {
+      user,
       mapStaff,
       mapStaff_by_char,
       staff_form,
+      user_staff_form,
       columns,
       addStaff,
       staff_list,
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
-      items:[
-        'Id', 'Username', 'First Name', 'Surname', 'Job Tittle','Nif', 'Email', 'Phone', 'Address', 'City', 'State', 'Country'
+      items: [
+        "Id",
+        "Username",
+        "First Name",
+        "Surname",
+        "Job Tittle",
+        "Nif",
+        "Email",
+        "Phone",
+        "Address",
+        "City",
+        "State",
+        "Country",
       ],
       prompt: ref(false),
       secondDialog: ref(false),
     };
   },
-  watch:{
-    input(value){
-      if(value != ""){
-        this.mapStaff_by_char(this.input_type , value)
-      }else{
-        this.mapStaff()
+  watch: {
+    input(value) {
+      if (value != "") {
+        this.mapStaff_by_char(this.input_type, value);
+      } else {
+        this.mapStaff();
       }
-    }
-  }
+    },
+  },
 });
 </script>
 

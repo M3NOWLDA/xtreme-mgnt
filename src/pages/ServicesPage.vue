@@ -40,6 +40,64 @@
       >
       </q-select>
     </div>
+
+    <q-space />
+
+    <q-dialog v-model="bar2" persistent full-width>
+      <q-card>
+        <q-card-section class="row items-right q-pb-none">
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+        <q-table
+          class="col fixed-header"
+          title="Service History"
+          :rows="historyList"
+          :columns="columns2"
+          dense
+          :rows-per-page-options="[5, 10, 15]"
+          row-key="id"
+        />
+      </q-card>
+    </q-dialog>
+
+    <q-space />
+
+    <q-dialog v-model="bar3" persistent full-width>
+      <q-card>
+        <q-card-section class="row items-right q-pb-none">
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+        <q-table
+          class="col fixed-header"
+          title="Orders History"
+          :rows="ordersList"
+          :columns="columns3"
+          dense
+          :rows-per-page-options="[5, 10, 15]"
+          row-key="id"
+        />
+      </q-card>
+    </q-dialog>
+
+    <q-space />
+
+    <q-dialog v-model="bar4" persistent full-width>
+      <q-card>
+        <q-card-section class="row items-right q-pb-none">
+          <q-btn icon="close" flat round dense v-close-popup />
+        </q-card-section>
+        <q-table
+          class="col fixed-header"
+          title="Budget History"
+          :rows="budgetList"
+          :columns="columns4"
+          dense
+          :rows-per-page-options="[5, 10, 15]"
+          row-key="id"
+        />
+      </q-card>
+    </q-dialog>
+
     <q-dialog v-model="prompt" persistent>
       <q-card style="min-width: 350px">
         <q-form @submit.prevent="addService(s_form)">
@@ -150,10 +208,30 @@
           <q-tr v-show="props.row.expand" :props="props">
             <q-td colspan="100%">
               <div class="row text-left q-mt-sm q-mb-sm">
-                <q-btn label="+Info"></q-btn>
-                <q-btn class="q-ml-sm" label="Update"></q-btn>
-                <q-btn class="q-ml-sm" label="Orders"></q-btn>
-                <q-btn class="q-ml-sm" label="History"></q-btn>
+                <q-btn
+                  @click="
+                    bar2 = true;
+                    stack;
+                    mapServicesHistory(props.row.ServiceId);
+                  "
+                  label="History"
+                ></q-btn>
+                <q-btn
+                  @click="
+                    bar3 = true;
+                    stack;
+                    mapServicesOrders(props.row.ServiceId);
+                  "
+                  label="Orders"
+                ></q-btn>
+                <q-btn
+                  @click="
+                    bar4 = true;
+                    stack;
+                    mapServicesBudgets(props.row.ServiceId);
+                  "
+                  label="Budgets"
+                ></q-btn>
 
                 <q-btn
                   v-if="props.row.State != 'done'"
@@ -163,7 +241,13 @@
                   glossy
                   color="yellow"
                   icon="paid"
-                  @click="change_state(props.row.ServiceId, 'to_budget')"
+                  @click="
+                    change_state(
+                      props.row.ServiceId,
+                      user.user_metadata.emp_id,
+                      'to_budget'
+                    )
+                  "
                 ></q-btn>
                 <q-btn
                   v-if="props.row.State != 'done'"
@@ -174,7 +258,11 @@
                   color="blue"
                   icon="hourglass_bottom"
                   @click="
-                    change_state(props.row.ServiceId, 'to_budget_approval')
+                    change_state(
+                      props.row.ServiceId,
+                      user.user_metadata.emp_id,
+                      'to_budget_approval'
+                    )
                   "
                 ></q-btn>
                 <q-btn
@@ -185,7 +273,13 @@
                   glossy
                   color="orange"
                   icon="local_shipping"
-                  @click="change_state(props.row.ServiceId, 'waiting_order')"
+                  @click="
+                    change_state(
+                      props.row.ServiceId,
+                      user.user_metadata.emp_id,
+                      'waiting_order'
+                    )
+                  "
                 ></q-btn>
                 <q-btn
                   v-if="props.row.State != 'done'"
@@ -195,7 +289,13 @@
                   glossy
                   color="red"
                   icon="pending"
-                  @click="change_state(props.row.ServiceId, 'to_execute')"
+                  @click="
+                    change_state(
+                      props.row.ServiceId,
+                      user.user_metadata.emp_id,
+                      'to_execute'
+                    )
+                  "
                 ></q-btn>
                 <q-btn
                   v-if="props.row.State != 'done'"
@@ -205,7 +305,13 @@
                   glossy
                   color="green"
                   icon="fact_check"
-                  @click="change_state(props.row.ServiceId, 'to_pickup')"
+                  @click="
+                    change_state(
+                      props.row.ServiceId,
+                      user.user_metadata.emp_id,
+                      'to_pickup'
+                    )
+                  "
                 ></q-btn>
                 <q-btn
                   v-if="props.row.State != 'done'"
@@ -215,7 +321,13 @@
                   glossy
                   color="green"
                   icon="verified"
-                  @click="change_state(props.row.ServiceId, 'done')"
+                  @click="
+                    change_state(
+                      props.row.ServiceId,
+                      user.user_metadata.emp_id,
+                      'done'
+                    )
+                  "
                 ></q-btn>
               </div>
             </q-td>
@@ -230,6 +342,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import useNotify from "src/composables/UseNotify";
 import useApi from "src/composables/UseApi";
+import useAuthUser from "src/composables/UseAuthUser";
 const columns = [
   {
     name: "id",
@@ -274,6 +387,124 @@ const columns = [
     sortable: true,
   },
 ];
+const columns2 = [
+  {
+    name: "id",
+    label: "ID",
+    align: "left",
+    field: "ServiceId",
+    sortable: true,
+  },
+  {
+    name: "username",
+    align: "center",
+    label: "Employee",
+    field: "EmployeeId",
+    sortable: true,
+  },
+  {
+    name: "FirstName",
+    align: "center",
+    label: "Report",
+    field: "Report",
+    sortable: true,
+  },
+  {
+    name: "Surname",
+    align: "center",
+    label: "Time Consumption",
+    field: "TimeConsumption",
+    sortable: true,
+  },
+];
+const columns3 = [
+  {
+    name: "id",
+    label: "ID",
+    align: "left",
+    field: "ServiceId",
+    sortable: true,
+  },
+  {
+    name: "orderid",
+    align: "center",
+    label: "Order ID",
+    field: "OrderId",
+    sortable: true,
+  },
+  {
+    name: "itemid",
+    align: "center",
+    label: "Item ID",
+    field: "ItemId",
+    sortable: true,
+  },
+  {
+    name: "orderdate",
+    align: "center",
+    label: "Order Date",
+    field: "OrderDate",
+    sortable: true,
+  },
+  {
+    name: "orderqty",
+    align: "center",
+    label: "Order Qty",
+    field: "OrderQty",
+    sortable: true,
+  },
+  {
+    name: "orderqty",
+    align: "center",
+    label: "Order Amount",
+    field: "OrderAmount",
+    sortable: true,
+  },
+  {
+    name: "orderstatus",
+    align: "center",
+    label: "Order Status",
+    field: "OrderStatus",
+    sortable: true,
+  },
+  {
+    name: "recpdate",
+    align: "center",
+    label: "Reception Date",
+    field: "ReceptionDate",
+    sortable: true,
+  },
+];
+const columns4 = [
+  {
+    name: "id",
+    label: "ID",
+    align: "left",
+    field: "Id",
+    sortable: true,
+  },
+  {
+    name: "cli_id",
+    align: "center",
+    label: "Service ID",
+    field: "ServiceId",
+    sortable: true,
+  },
+  {
+    name: "cost",
+    align: "center",
+    label: "Cost",
+    field: "Cost",
+    sortable: true,
+  },
+  {
+    name: "report",
+    align: "center",
+    label: "Report",
+    field: "Report",
+    sortable: true,
+  },
+];
 export default defineComponent({
   name: "ServicesPage",
 
@@ -286,11 +517,18 @@ export default defineComponent({
   setup() {
     const { notifyError, notifySuccess } = useNotify();
     const serviceList = ref([]);
+    const historyList = ref([]);
+    const ordersList = ref([]);
+    const budgetList = ref([]);
+    const { user } = useAuthUser();
     const {
+      getServiceHistoryByID,
       getServiceList,
       postService,
       service_state,
       getServiceList_by_char,
+      getServiceOrdersByID,
+      getServiceBudgetsByID,
     } = useApi();
 
     // Reactive form for client data inputs
@@ -321,6 +559,33 @@ export default defineComponent({
       }
     };
 
+    const mapServicesHistory = async (service_id) => {
+      console.log(service_id);
+      try {
+        historyList.value = await getServiceHistoryByID(service_id);
+      } catch (error) {
+        notifyError(error);
+      }
+    };
+
+    const mapServicesOrders = async (service_id) => {
+      console.log(service_id);
+      try {
+        ordersList.value = await getServiceOrdersByID(service_id);
+      } catch (error) {
+        notifyError(error);
+      }
+    };
+
+    const mapServicesBudgets = async (service_id) => {
+      console.log(service_id);
+      try {
+        budgetList.value = await getServiceBudgetsByID(service_id);
+      } catch (error) {
+        notifyError(error);
+      }
+    };
+
     const addService = async (s_form) => {
       s_form.endDate = "2000-01-01";
       if (s_form.type == "Reparação Equip") s_form.typeId = 1;
@@ -342,10 +607,10 @@ export default defineComponent({
       }
     };
 
-    const change_state = async (service_id, state) => {
+    const change_state = async (service_id, emp_id, state) => {
       console.log(service_id, state);
       try {
-        const code_resp = await service_state(service_id, state);
+        const code_resp = await service_state(service_id, emp_id, state);
         if (code_resp == 200) {
           serviceList.value = await getServiceList();
           notifySuccess("state updated!");
@@ -362,14 +627,27 @@ export default defineComponent({
       mapServices();
     });
     return {
+      user,
       mapServices,
       mapServices_by_char,
+      mapServicesHistory,
+      mapServicesOrders,
+      mapServicesBudgets,
       s_form,
       columns,
       filter: ref([]),
       serviceList,
+      historyList,
+      ordersList,
+      budgetList,
       addService,
       change_state,
+      bar2: ref(false),
+      bar3: ref(false),
+      bar4: ref(false),
+      columns2,
+      columns3,
+      columns4,
       items: [
         "Manutenção Equip",
         "Reparação Equip",

@@ -2,7 +2,7 @@
   <q-page class="flex flex-center">
     <div v-if="user">
       <div class="row justify-center">
-        <h3>Welcome, {{ user.user_metadata.name }}.</h3>
+        <h3>Welcome, {{ user.user_metadata.emp_id }}.</h3>
       </div>
       <div class="row justify-center">
         <div class="q-pa-md">
@@ -21,6 +21,7 @@
                 <q-tab name="todo" label="Pending to start" />
                 <q-tab name="waitingorder" label="Waiting for delivery" />
                 <q-tab name="budget" label="Waiting for budget" />
+                <q-tab name="payment" label="Waiting for payment" />
                 <q-tab name="done" label="Latest Done" />
               </q-tabs>
 
@@ -79,6 +80,19 @@
                     />
                   </div>
                 </q-tab-panel>
+                <q-tab-panel name="payment">
+                  <div id="divTable6" class="row q-mt-md">
+                    <q-table
+                      class="col fixed-header"
+                      title=""
+                      :rows="wfpList"
+                      :columns="columnsWFP"
+                      dense
+                      :rows-per-page-options="[5, 10, 15, 20, 25]"
+                      row-key="id"
+                    />
+                  </div>
+                </q-tab-panel>
                 <q-tab-panel name="done">
                   <div id="divTable5" class="row q-mt-md">
                     <q-table
@@ -121,14 +135,6 @@
                 icon="build"
                 label="Services"
                 to="/services"
-                exact
-              />
-              <q-route-tab
-                :ripple="false"
-                name="users"
-                icon="person_search"
-                label="Users"
-                to="/users"
                 exact
               />
               <q-route-tab
@@ -323,6 +329,37 @@ const columnsLD = [
   },
 ];
 
+const columnsWFP = [
+  {
+    name: "id",
+    label: "Service ID",
+    align: "center",
+    field: "ServiceId",
+    sortable: true,
+  },
+  {
+    name: "Client ID",
+    align: "center",
+    label: "Client ID",
+    field: "ClientId",
+    sortable: true,
+  },
+  {
+    name: "Start Date",
+    align: "center",
+    label: "Start Date",
+    field: "StartDate",
+    sortable: true,
+  },
+  {
+    name: "Service Type",
+    align: "center",
+    label: "Type",
+    field: "Type",
+    sortable: true,
+  },
+];
+
 export default defineComponent({
   name: "PageMe",
   setup() {
@@ -333,32 +370,33 @@ export default defineComponent({
     const wfdList = ref([]);
     const wfbList = ref([]);
     const ldList = ref([]);
+    const wfpList = ref([]);
     const { getServiceByFilter } = useApi();
 
     const mapWFA = async () => {
       try {
-        wfaList.value = await getServiceByFilter("client_approval");
+        wfaList.value = await getServiceByFilter("to_budget_approval");
       } catch (error) {
         console(error);
       }
     };
     const mapPTS = async () => {
       try {
-        ptsList.value = await getServiceByFilter("execute");
+        ptsList.value = await getServiceByFilter("to_execute");
       } catch (error) {
         console(error);
       }
     };
     const mapWFD = async () => {
       try {
-        wfdList.value = await getServiceByFilter("ordering");
+        wfdList.value = await getServiceByFilter("waiting_order");
       } catch (error) {
         console(error);
       }
     };
     const mapWFB = async () => {
       try {
-        wfbList.value = await getServiceByFilter("orçamento");
+        wfbList.value = await getServiceByFilter("to_budget");
       } catch (error) {
         console(error);
       }
@@ -370,12 +408,20 @@ export default defineComponent({
         console(error);
       }
     };
+    const mapWFP = async () => {
+      try {
+        wfpList.value = await getServiceByFilter("waiting_payment");
+      } catch (error) {
+        console(error);
+      }
+    };
     onMounted(() => {
       mapWFA();
       mapPTS();
       mapWFD();
       mapWFB();
       mapLD();
+      mapWFP();
     });
     return {
       user,
@@ -385,11 +431,13 @@ export default defineComponent({
       columnsWFD,
       columnsWFB,
       columnsLD,
+      columnsWFP,
       wfaList,
       ptsList,
       wfdList,
       wfbList,
       ldList,
+      wfpList,
       nameRules: [(val) => (val && val.length > 0) || "Filed is Required!"],
     };
   },
